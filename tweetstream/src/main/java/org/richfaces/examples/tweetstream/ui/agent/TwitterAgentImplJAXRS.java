@@ -109,7 +109,7 @@ public class TwitterAgentImplJAXRS implements TwitterAgent, Serializable
    @Override 
    @GET
    @Produces("application/json")
-   @Path("hastags")   
+   @Path("hashtags")   
    public List<HashTag> getHashtags()
    {
       return source.getTwitterSource().getTopHashtags();
