@@ -42,6 +42,7 @@ import twitter4j.TwitterFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.annotation.PostConstruct;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -82,6 +83,7 @@ public class TwitterSourceLocal implements TwitterSource
 
    PublishController pubControl = new PublishController();
    
+   @PostConstruct
    public void init()
    {
       System.out.println("&&&&&&&&&&& Init\n\n\n\n\n");
@@ -235,7 +237,8 @@ public class TwitterSourceLocal implements TwitterSource
    @Path("hello")
    public String sayHello() {
 	  System.out.println("HERE I AM");
-	  init();
+	  //init();
+	  log.info("LOG MESSAGE");
 	  return "{ \"hello\" : \"world3 " + new java.util.Date() + "\"}";
    }
    

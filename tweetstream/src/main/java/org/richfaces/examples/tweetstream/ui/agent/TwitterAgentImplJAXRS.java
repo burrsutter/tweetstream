@@ -30,9 +30,15 @@ import org.richfaces.examples.tweetstream.domain.Tweeter;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
+
+import org.jboss.logging.Logger;
 
 
 /**
@@ -44,16 +50,29 @@ import javax.annotation.PostConstruct;
  *
  * @author <a href="mailto:jbalunas@redhat.com">Jay Balunas</a>
  */
-@Named("twitterAgent")
+@Named("twitterAgentJAXRS")
 @SessionScoped
-
-public class TwitterAgentImpl implements TwitterAgent, Serializable
+@Path("/twitter")
+public class TwitterAgentImplJAXRS implements TwitterAgent, Serializable
 {
    private Tweet selectedTweet;
 
    @Inject
+   Logger log;
+   
+   @Inject
    private TweetStream source;
 
+   @GET
+   @Produces("application/json")
+   @Path("hello")
+   public String sayHello() {
+	  System.out.println("HERE I AM");
+	  log.info("LOG MESSAGE");
+	  log.info("" + source);
+	  return "{ \"hello\" : \"world from TwitterAgentImplJAXRS " + new java.util.Date() + "\"}";
+   }
+   
    public void updateTweets()
    {
       source.getTwitterSource().fetchContent();
@@ -70,23 +89,35 @@ public class TwitterAgentImpl implements TwitterAgent, Serializable
    }
 
    @Override 
+   @GET
+   @Produces("application/json")
+   @Path("tweets")
    public List<Tweet> getTweets()
    {
       return source.getTwitterSource().getTweets();
    }
 
    @Override 
+   @GET
+   @Produces("application/json")
+   @Path("tweeters")   
    public List<Tweeter> getTweeters()
    {
       return source.getTwitterSource().getTopTweeters();
    }
 
    @Override 
+   @GET
+   @Produces("application/json")
+   @Path("hastags")   
    public List<HashTag> getHashtags()
    {
       return source.getTwitterSource().getTopHashtags();
    }
 
+   @GET
+   @Produces("application/json")
+   @Path("selectedtweet")
    public Tweet getSelectedTweet()
    {
       return selectedTweet;
